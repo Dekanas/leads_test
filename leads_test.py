@@ -17,6 +17,8 @@ if login_type == "Salesperson":
     password = st.text_input("Enter your password:", type="password")
     if password == 'password':
         leads_df = leads_df[leads_df['salesmen'] == username]
+        # Add new column for lead status
+        leads_df['status'] = [''] * len(leads_df)
         st.write(leads_df)
     else:
         st.write("Incorrect password. Please try again.")
