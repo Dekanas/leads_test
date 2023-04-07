@@ -10,6 +10,11 @@ results_df = pd.read_excel('results_test.xlsx')
 salespeople = ['Miglė', 'Paulius', 'Justina']
 manager_password = 'password'
 
+
+# Define status options
+status_options = ['', 'Contacted', 'Not interested', 'Follow up']
+
+
 # Create login form and display leads data
 login_type = st.radio("Login as:", ["Salesperson", "Manager"])
 if login_type == "Salesperson":
@@ -19,17 +24,37 @@ if login_type == "Salesperson":
         leads_df = leads_df[leads_df['salesmen'] == username]
         # Add new column for lead status
         leads_df['status'] = [''] * len(leads_df)
-        st.write(leads_df)
+         # Define status column
+        status_column = AgGridColumn(field='status', editable=True, cellEditor='agSelectCellEditor', cellEditorParams={
+            'values': status_options
+        })
+
+        # Display leads data with status column
+        leads_df = AgGrid(leads_df[['id_contract', 'product_group', 'phone', status_column]], 
+                          gridOptions={'editable': True, 'enableRangeSelection': True, 'enableCellChangeFlash': True},
+                          update_mode=GridUpdateMode.VALUE_CHANGED)
     else:
         st.write("Incorrect password. Please try again.")
 elif login_type == "Manager":
     password = st.text_input("Enter the manager password:", type="password")
     if password == manager_password:
+        # Add new column for lead status
+        leads_df['status'] = [''] * len(leads_df)
+
+        # Define status column
+        status_column = AgGridColumn(field='status', cellEditor='agSelectCellEditor', cellEditorParams={
+            'values': status_options
+        })
+
         # Set up grid options
         gb = GridOptionsBuilder.from_dataframe(leads_df)
         gb.configure_pagination()
         gb.configure_side_bar()
         gb.configure_selection('single')
+        gb.configure_grid_options(domLayout='autoHeight')
+        gb.configure_column('status', editable=True, cellEditor='agSelectCellEditor', cellEditorParams={
+            'values': status_options
+        })
         gridOptions = gb.build()
 
         # Display leads data in grid
