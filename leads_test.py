@@ -34,6 +34,6 @@ elif login_type == "Manager":
         leads_df = AgGrid(leads_df, gridOptions=gridOptions, update_mode=GridUpdateMode.SELECTION_CHANGED)
 
         # Display summary data
-        st.write(leads_df.groupby('assigned_salesperson')['extension_price'].agg(['sum']))
+        st.write(leads_df.groupby('salesmen')['phone'].agg(['count']))
     else:
         st.write("Incorrect password. Please try again.")
