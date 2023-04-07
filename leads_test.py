@@ -3,8 +3,8 @@ import pandas as pd
 from st_aggrid import AgGrid, GridOptionsBuilder, GridUpdateMode
 
 # Load datasets
-leads_df = pd.read_csv('leads.csv')
-results_df = pd.read_csv('results.csv')
+leads_df = pd.read_excel('Leads_test.xlsx')
+results_df = pd.read_excel('results_test.xlsx')
 
 # Define login options
 salespeople = ['Salesperson 1', 'Salesperson 2', 'Salesperson 3']
