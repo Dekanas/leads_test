@@ -24,13 +24,19 @@ if login_type == "Salesperson":
         leads_df = leads_df[leads_df['salesmen'] == username]
         # Add new column for lead status
         leads_df['status'] = [''] * len(leads_df)
-         # Define status column
-        status_column = AgGridColumn(field='status', editable=True, cellEditor='agSelectCellEditor', cellEditorParams={
-            'values': status_options
-        })
+        # Define column definitions for status column
+        status_column = {
+            'field': 'status',
+            'editable': True,
+            'cellEditor': 'agSelectCellEditor',
+            'cellEditorParams': {
+                'values': status_options
+            }
+        }
 
         # Display leads data with status column
-        leads_df = AgGrid(leads_df[['id_contract', 'product_group', 'phone', status_column]], 
+        leads_df = AgGrid(leads_df[['id_contract', 'product_group', 'phone', 'salesmen']], 
+                          column_defs=[status_column],
                           gridOptions={'editable': True, 'enableRangeSelection': True, 'enableCellChangeFlash': True},
                           update_mode=GridUpdateMode.VALUE_CHANGED)
     else:
@@ -41,10 +47,14 @@ elif login_type == "Manager":
         # Add new column for lead status
         leads_df['status'] = [''] * len(leads_df)
 
-        # Define status column
-        status_column = AgGridColumn(field='status', cellEditor='agSelectCellEditor', cellEditorParams={
-            'values': status_options
-        })
+        # Define column definitions for status column
+        status_column = {
+            'field': 'status',
+            'cellEditor': 'agSelectCellEditor',
+            'cellEditorParams': {
+                'values': status_options
+            }
+        }
 
         # Set up grid options
         gb = GridOptionsBuilder.from_dataframe(leads_df)
@@ -58,7 +68,7 @@ elif login_type == "Manager":
         gridOptions = gb.build()
 
         # Display leads data in grid
-        leads_df = AgGrid(leads_df, gridOptions=gridOptions, update_mode=GridUpdateMode.SELECTION_CHANGED)
+        leads_df = AgGrid(leads_df, column_defs=[status_column], gridOptions=gridOptions, update_mode=GridUpdateMode.SELECTION_CHANGED)
 
         # Display summary data
         st.write(leads_df.groupby('salesmen')['phone'].agg(['count']))
