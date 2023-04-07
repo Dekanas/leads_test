@@ -7,7 +7,7 @@ leads_df = pd.read_excel('Leads_test.xlsx')
 results_df = pd.read_excel('results_test.xlsx')
 
 # Define login options
-salespeople = ['Salesperson 1', 'Salesperson 2', 'Salesperson 3']
+salespeople = ['Miglė', 'Paulius', 'Justina']
 manager_password = 'password'
 
 # Create login form and display leads data
@@ -16,7 +16,7 @@ if login_type == "Salesperson":
     username = st.selectbox("Select your name:", salespeople)
     password = st.text_input("Enter your password:", type="password")
     if password == 'password':
-        leads_df = leads_df[leads_df['assigned_salesperson'] == username]
+        leads_df = leads_df[leads_df['salesmen'] == username]
         st.write(leads_df)
     else:
         st.write("Incorrect password. Please try again.")
